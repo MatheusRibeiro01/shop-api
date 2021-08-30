@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shop.Data;
 using Shop.Models;
 
 
@@ -16,13 +17,19 @@ public class CategoryController : ControllerBase
     {
         var categories = await context.Categories.AsNoTracking().ToArrayAsync();
         return Ok(categories);
+
+        //o AsNotTrackig limpa as informações adicionais que o entity trafega para que eu traga somente o que interessa
     }
 
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<ActionResult<Category>> GetById(int id)
+    public async Task<ActionResult<Category>> GetById(
+        int id,
+        [FromServices] DataContext context
+        )
     {
-        return new Category();
+         var category = await context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id== id);
+         return Ok(category);
     }
     
     [HttpPost]
