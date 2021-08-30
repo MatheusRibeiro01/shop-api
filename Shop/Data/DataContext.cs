@@ -1,13 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 
-public class DataContext : DbContext
+ namespace Shop.Data
 {
-    public DataContext(DbContextOptions<DataContext> options) 
-        : base(options)
-        {}
+    public class DataContext : DbContext
+    {
+        public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
+        {
+        }
 
-    public DbSet<Product> Products { get; set; }    
-    public DbSet<Category> Categories { get; set; }    
-    public DbSet<User> Users { get; set; }    
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("server=localhost,1433;database=Shop;User ID=SA;Password=P@ssword123");
+        }
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
+    }
 }
+ 
